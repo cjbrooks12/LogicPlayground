@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="button_false">#a0a0a0</color>
+	<color name="button_true">#B44DDD</color>
+	<color name="shadow">#707070</color>
+	<color name="background_light">#F0F0F0</color>
+
+	<!-- - - - - - - - - Theme Header Section - - - - - - - - -->
+	<style name="Theme.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/button_true</item>
+		<item name="colorPrimaryDark">@color/button_true</item>
+		<item name="colorAccent">@color/button_true</item>
+		<item name="windowActionModeOverlay">true</item>
+	</style>
+</resources>
