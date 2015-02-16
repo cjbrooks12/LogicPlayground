@@ -1,8 +1,10 @@
-package com.caseybrooks.logicplayground;
+package com.caseybrooks.logicplayground.fragments;
+
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.caseybrooks.logicplayground.R;
 import com.caseybrooks.logicplayground.evaluator.Identifier;
 import com.caseybrooks.logicplayground.evaluator.Node;
 import com.caseybrooks.logicplayground.evaluator.Parser;
@@ -22,32 +25,38 @@ import com.caseybrooks.logicplayground.evaluator.Parser;
 import java.util.ArrayList;
 import java.util.Set;
 
+public class InteractiveFragment extends Fragment {
 
-public class MainActivity extends ActionBarActivity {
+	public static InteractiveFragment newInstance() {
+		InteractiveFragment fragment = new InteractiveFragment();
+		Bundle args = new Bundle();
+		fragment.setArguments(args);
+		return fragment;
+	}
 
-	EditText enterExpression;
-	Button parseExpressionButton;
-
-	ListView toggleButtonList;
-	ToggleAdapter toggleAdapter;
-
-	Node root;
-	boolean output;
-	FrameLayout fab;
-	TextView fab_text;
-
-	Context context;
-
+	public InteractiveFragment() {
+		// Required empty public constructor
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		if(getArguments() != null) {
+		}
+	}
 
-		this.context = this;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		View view = inflater.inflate(R.layout.fragment_interactive, container, false);
 
-		fab = (FrameLayout) findViewById(R.id.fab);
-		fab_text = (TextView) findViewById(R.id.fab_text);
+		this.context = getActivity();
+
+		setHasOptionsMenu(true);
+
+		fab = (FrameLayout) view.findViewById(R.id.fab);
+		fab_text = (TextView) view.findViewById(R.id.fab_text);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -55,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
-		toggleButtonList = (ListView) findViewById(R.id.toggleButtonList);
+		toggleButtonList = (ListView) view.findViewById(R.id.toggleButtonList);
 		toggleAdapter = new ToggleAdapter(new ArrayList<ToggleButton>());
 		toggleButtonList.setAdapter(toggleAdapter);
 		toggleButtonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,8 +85,8 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
-		enterExpression = (EditText) findViewById(R.id.editText);
-		parseExpressionButton = (Button) findViewById(R.id.parseExpressionButton);
+		enterExpression = (EditText) view.findViewById(R.id.editText);
+		parseExpressionButton = (Button) view.findViewById(R.id.parseExpressionButton);
 		parseExpressionButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -87,17 +96,31 @@ public class MainActivity extends ActionBarActivity {
 					root = parser.parse();
 
 					if(root == null) {
-						Toast.makeText(getApplicationContext(), "Cannot parse string, not formatted correctly", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "Cannot parse string, not formatted correctly", Toast.LENGTH_SHORT).show();
 					}
 					else {
-						Toast.makeText(getApplicationContext(), "String was parsed correctly", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "String was parsed correctly", Toast.LENGTH_SHORT).show();
 						setup();
 					}
 				}
 			}
 		});
-//		setup();
+
+		return view;
 	}
+
+	EditText enterExpression;
+	Button parseExpressionButton;
+
+	ListView toggleButtonList;
+	ToggleAdapter toggleAdapter;
+
+	Node root;
+	boolean output;
+	FrameLayout fab;
+	TextView fab_text;
+
+	Context context;
 
 	public void setup() {
 		Set<Identifier> identifiers = root.getAllIdentifiers();
@@ -105,7 +128,7 @@ public class MainActivity extends ActionBarActivity {
 
 		for(Identifier identifier : identifiers) {
 
-			ToggleButton toggle = new ToggleButton(this);
+			ToggleButton toggle = new ToggleButton(context);
 			toggle.setText(identifier.getName());
 			toggle.setTextOff(identifier.getName());
 			toggle.setTextOn(identifier.getName());
@@ -116,26 +139,7 @@ public class MainActivity extends ActionBarActivity {
 			toggleAdapter.addItem(toggle);
 		}
 
-		enterExpression.setText(root.getName());
-
-
-//		setInput("a");
-//		setInput("b");
-//		setInput("c");
-//		setInput("d");
-//		setInput("e");
-//		setInput("f");
-//		setInput("g");
-//		setInput("h");
-//
-//		Operator a_and_b = new Operator(Node.Type.NAND, new Identifier("a"),  new Identifier("b"));
-//		Operator c_and_d = new Operator(Node.Type.NOR, new Identifier("c"),  new Identifier("d"));
-//		Operator e_and_f = new Operator(Node.Type.XOR, new Identifier("e"),  new Identifier("f"));
-//		Operator g_and_h = new Operator(Node.Type.XNOR, new Identifier("g"),  new Identifier("h"));
-//
-//		Operator left = new Operator(Node.Type.OR, a_and_b, c_and_d);
-//		Operator right = new Operator(Node.Type.OR, e_and_f, g_and_h);
-//		root = new Operator(Node.Type.OR, left, right).evaluate();
+		evaluateExpression();
 	}
 
 	public void evaluateExpression() {
@@ -182,20 +186,6 @@ public class MainActivity extends ActionBarActivity {
 			return buttons.get(position);
 		}
 	}
-
-//	public void setInput(String name) {
-//			String input = name.toLowerCase();
-//
-//			ToggleButton toggle = new ToggleButton(this);
-//			toggle.setText(input);
-//			toggle.setTextOff(input);
-//			toggle.setTextOn(input);
-//			toggle.setFocusable(false);
-//			toggle.setFocusableInTouchMode(false);
-//			toggle.setClickable(false);
-//
-//			toggleAdapter.addItem(toggle);
-//	}
 
 	public void setOutput(boolean state) {
 		output = state;

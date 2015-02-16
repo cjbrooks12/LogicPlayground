@@ -30,7 +30,7 @@ public abstract class Node {
 		this.value = value;
 	}
 
-	/** Evaluates the expression tree using preorder traversal */
+	/** Evaluates the expression tree at this node downward */
 	public abstract Node evaluate();
 
 	/** determine if this node is equal to another by seeing if its children are equal */
