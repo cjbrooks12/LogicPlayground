@@ -9,6 +9,7 @@
 		android:layout_alignParentStart="true"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
+		android:singleLine="true"
 		android:id="@+id/editText"
 		android:layout_margin="16dp"
 		android:hint="Enter Logic Expression (AB XOR C)"/>
@@ -20,21 +21,39 @@
 		android:layout_below="@id/editText"
 		android:text="Parse Expression"/>
 
-	<ListView
+	<GridView
 		android:id="@+id/toggleButtonList"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:numColumns="3"
 		android:focusable="false"
 		android:descendantFocusability="blocksDescendants"
 		android:layout_below="@+id/parseExpressionButton"
+		android:layout_above="@+id/treeviewLayout"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentStart="true"
-		android:layout_alignParentBottom="true"/>
+		android:layout_alignParentStart="true"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="216dp"
+		android:id="@+id/treeviewLayout"
+		android:layout_alignParentBottom="true"
+		android:background="#88508a4c">
+		<HorizontalScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<com.caseybrooks.logicplayground.views.TreeView
+				android:id="@+id/treeview"
+				android:padding="8dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+		</HorizontalScrollView>
+	</ScrollView>
 
 	<FrameLayout
 		android:layout_width="64dp"
 		android:layout_height="64dp"
-		android:layout_alignParentBottom="true"
+		android:layout_alignTop="@id/treeviewLayout"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
 		android:layout_margin="16dp"

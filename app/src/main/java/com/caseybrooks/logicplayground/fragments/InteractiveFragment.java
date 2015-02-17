@@ -1,9 +1,9 @@
 package com.caseybrooks.logicplayground.fragments;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -21,11 +21,27 @@ import com.caseybrooks.logicplayground.R;
 import com.caseybrooks.logicplayground.evaluator.Identifier;
 import com.caseybrooks.logicplayground.evaluator.Node;
 import com.caseybrooks.logicplayground.evaluator.Parser;
+import com.caseybrooks.logicplayground.views.TreeView;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 public class InteractiveFragment extends Fragment {
+
+	EditText enterExpression;
+	Button parseExpressionButton;
+
+	GridView toggleButtonList;
+	ToggleAdapter toggleAdapter;
+
+	Node root;
+	boolean output;
+	FrameLayout fab;
+	TextView fab_text;
+
+	TreeView treeview;
+
+	Context context;
 
 	public static InteractiveFragment newInstance() {
 		InteractiveFragment fragment = new InteractiveFragment();
@@ -55,6 +71,8 @@ public class InteractiveFragment extends Fragment {
 
 		setHasOptionsMenu(true);
 
+		treeview = (TreeView) view.findViewById(R.id.treeview);
+
 		fab = (FrameLayout) view.findViewById(R.id.fab);
 		fab_text = (TextView) view.findViewById(R.id.fab_text);
 		fab.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +82,7 @@ public class InteractiveFragment extends Fragment {
 			}
 		});
 
-		toggleButtonList = (ListView) view.findViewById(R.id.toggleButtonList);
+		toggleButtonList = (GridView) view.findViewById(R.id.toggleButtonList);
 		toggleAdapter = new ToggleAdapter(new ArrayList<ToggleButton>());
 		toggleButtonList.setAdapter(toggleAdapter);
 		toggleButtonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,12 +113,9 @@ public class InteractiveFragment extends Fragment {
 					Parser parser = new Parser(expression);
 					root = parser.parse();
 
-					if(root == null) {
-						Toast.makeText(context, "Cannot parse string, not formatted correctly", Toast.LENGTH_SHORT).show();
-					}
-					else {
-						Toast.makeText(context, "String was parsed correctly", Toast.LENGTH_SHORT).show();
+					if(root != null) {
 						setup();
+						evaluateExpression();
 					}
 				}
 			}
@@ -108,19 +123,6 @@ public class InteractiveFragment extends Fragment {
 
 		return view;
 	}
-
-	EditText enterExpression;
-	Button parseExpressionButton;
-
-	ListView toggleButtonList;
-	ToggleAdapter toggleAdapter;
-
-	Node root;
-	boolean output;
-	FrameLayout fab;
-	TextView fab_text;
-
-	Context context;
 
 	public void setup() {
 		Set<Identifier> identifiers = root.getAllIdentifiers();
@@ -136,6 +138,9 @@ public class InteractiveFragment extends Fragment {
 			toggle.setFocusableInTouchMode(false);
 			toggle.setClickable(false);
 
+			float density = getResources().getDisplayMetrics().density;
+			toggle.setPadding((int)(8*density), 0, (int)(8*density), 0);
+
 			toggleAdapter.addItem(toggle);
 		}
 
@@ -143,10 +148,11 @@ public class InteractiveFragment extends Fragment {
 	}
 
 	public void evaluateExpression() {
-		Node y = root.evaluate();
+		root.evaluate();
+		treeview.setTree(root);
 
-		enterExpression.setText(y.getName());
-		setOutput(y.value);
+		enterExpression.setText(root.getName());
+		setOutput(root.value);
 	}
 
 	public class ToggleAdapter extends BaseAdapter {

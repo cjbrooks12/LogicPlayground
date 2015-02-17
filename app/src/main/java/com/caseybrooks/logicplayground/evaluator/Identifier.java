@@ -51,4 +51,9 @@ public class Identifier extends Node implements Comparable{
 		Identifier other = (Identifier) another;
 		return this.name.compareTo(other.getName());
 	}
+
+	@Override
+	public int getHeight() {
+		return 1;
+	}
 }

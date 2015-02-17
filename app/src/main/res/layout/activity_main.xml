@@ -15,17 +15,6 @@
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true">
 
-		<!--<EditText-->
-			<!--android:layout_width="match_parent"-->
-			<!--android:layout_height="wrap_content"-->
-			<!--android:layout_alignParentLeft="true"-->
-			<!--android:layout_alignParentStart="true"-->
-			<!--android:layout_alignParentRight="true"-->
-			<!--android:layout_alignParentEnd="true"-->
-			<!--android:id="@+id/editText"-->
-			<!--android:layout_margin="16dp"-->
-			<!--android:hint="Enter Logic Expression (AB XOR C)"/>-->
-
 	</android.support.v7.widget.Toolbar>
 
 	<FrameLayout

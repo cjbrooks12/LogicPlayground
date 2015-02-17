@@ -23,6 +23,7 @@ public abstract class Node {
 	protected String name;
 	public Type type;
 	public boolean value;
+	public int level;
 
 	public Node(String name, Type type, boolean value) {
 		this.name = name;
@@ -41,4 +42,7 @@ public abstract class Node {
 
 	public abstract Set<Identifier> getAllIdentifiers();
 	public abstract String getName();
+
+	/** The height of the entire tree from this Node downard */
+	public abstract int getHeight();
 }

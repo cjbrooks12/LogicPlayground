@@ -139,4 +139,18 @@ public class Operator extends Node {
 			return null;
 		}
 	}
+
+	@Override
+	public int getHeight() {
+		if(left != null && right != null) {
+			return Math.max(1 + left.getHeight(), 1 + right.getHeight());
+		}
+		else if(left != null) {
+			return 1+ left.getHeight();
+		}
+		else if(right != null) {
+			return 1 + right.getHeight();
+		}
+		else return 1;
+	}
 }
