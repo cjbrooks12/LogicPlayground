@@ -25,6 +25,10 @@ public abstract class Node {
 	public boolean value;
 	public int level;
 
+	public float x;
+	public float y;
+	public float radius;
+
 	public Node(String name, Type type, boolean value) {
 		this.name = name;
 		this.type = type;

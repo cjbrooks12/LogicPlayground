@@ -128,18 +128,18 @@ public class TreeView extends View {
 					rowIndex = 0;
 				}
 
-				float posX = density*rowIndex*72 + density*32 + getPaddingLeft();
-				float posY = density*level*72 + density*32 + getPaddingTop();
-				float radius = (node.type == Node.Type.IDENTIFIER) ? density*32 : density*24;
+				node.x = density*rowIndex*72 + density*32 + getPaddingLeft();
+				node.y = density*level*72 + density*32 + getPaddingTop();
+				node.radius = (node.type == Node.Type.IDENTIFIER) ? density*32 : density*24;
 
 				rowIndex++;
 
 				//draw node
 				if(node.value) {
-					canvas.drawCircle(posX, posY, radius, mTruePaint);
+					canvas.drawCircle(node.x, node.y, node.radius, mTruePaint);
 				}
 				else {
-					canvas.drawCircle(posX, posY, radius, mFalsePaint);
+					canvas.drawCircle(node.x, node.y, node.radius, mFalsePaint);
 				}
 
 				String nodeText = "";
@@ -155,7 +155,7 @@ public class TreeView extends View {
 				case XNOR: 			nodeText = "XNOR"; break;
 				}
 
-				canvas.drawText(nodeText, posX, posY, mTextPaint);
+				canvas.drawText(nodeText, node.x, node.y, mTextPaint);
 
 				if (node.type != Node.Type.IDENTIFIER) {
 					Operator innerNode = (Operator) node;
